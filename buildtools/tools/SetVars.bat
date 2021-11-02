@@ -1,0 +1,5 @@
+SET OPENCOVER_PATH="packages\OpenCover.4.7.922\tools\OpenCover.Console.exe"
+SET XUNIT_PATH="packages\xunit.runner.console.2.4.1\tools\net472\xunit.console.exe"
+SET TEST_PROJECT_BUILD_FOLDER="MessagingTest"
+SET REPORTGENERATOR_PATH="packages\ReportGenerator.4.3.3\tools\net47\ReportGenerator.exe"
+SET SIGNTOOL_PATH="C:\Program Files (x86)\Windows Kits\10\bin\10.0.17134.0\x64\signtool.exe"
