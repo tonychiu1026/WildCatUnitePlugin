@@ -49,6 +49,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseCommand.cs" />
+    <Compile Include="CommandWrapper.cs" />
     <Compile Include="PluginModuleHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

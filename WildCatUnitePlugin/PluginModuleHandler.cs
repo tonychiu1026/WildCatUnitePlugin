@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using Intel.Unite.Common.Command;
@@ -11,6 +12,8 @@ using Intel.Unite.Common.Core;
 using Intel.Unite.Common.Manifest;
 using Intel.Unite.Common.Module.Common;
 using Intel.Unite.Common.Module.Feature.Hub;
+using Intel.Unite.Common.Logging;
+using Intel.Unite.Common.Command.Serialize;
 
 namespace WildCatUnitePlugin
 {
@@ -74,9 +77,9 @@ namespace WildCatUnitePlugin
         {
         }
 
-        public override string HtmlUrlOrContent => throw new NotImplementedException();
+        public override string HtmlUrlOrContent => null;
 
-        public override Dispatcher CurrentUiDispatcher { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public override Dispatcher CurrentUiDispatcher { get; set;}
 
         public override ModuleManifest ModuleManifest => _moduleManifest;
 
@@ -84,57 +87,73 @@ namespace WildCatUnitePlugin
 
         public override void HubConnected(HubInfo hubInfo)
         {
-            throw new NotImplementedException();
+            RuntimeContext.LogManager.LogMessage(ModuleInfo.Id, LogLevel.Info, this.GetType().Name, MethodBase.GetCurrentMethod().Name);
         }
 
         public override void HubDisconnected(HubInfo hubInfo)
         {
-            throw new NotImplementedException();
+            RuntimeContext.LogManager.LogMessage(ModuleInfo.Id, LogLevel.Info, this.GetType().Name, MethodBase.GetCurrentMethod().Name);
         }
 
         public override void HubInfoChanged(HubInfo hubInfo)
         {
-            throw new NotImplementedException();
+            RuntimeContext.LogManager.LogMessage(ModuleInfo.Id, LogLevel.Info, this.GetType().Name, MethodBase.GetCurrentMethod().Name);
         }
 
         public override void IncomingMessage(Message message)
         {
-            throw new NotImplementedException();
+            RuntimeContext.LogManager.LogMessage(ModuleInfo.Id, LogLevel.Info, this.GetType().Name, MethodBase.GetCurrentMethod().Name);
+            //This is where you will consume messages... 
         }
 
         public override void Load()
         {
-            throw new NotImplementedException();
+            RuntimeContext.LogManager.LogMessage(ModuleInfo.Id, LogLevel.Info, this.GetType().Name, MethodBase.GetCurrentMethod().Name);
         }
 
         public override bool OkToSleepDisplay()
         {
-            throw new NotImplementedException();
+            RuntimeContext.LogManager.LogMessage(ModuleInfo.Id, LogLevel.Info, this.GetType().Name, MethodBase.GetCurrentMethod().Name);
+            return true;
         }
 
         public override void SessionKeyChanged(KeyValuePair sessionKey)
         {
-            throw new NotImplementedException();
+            RuntimeContext.LogManager.LogMessage(ModuleInfo.Id, LogLevel.Info, this.GetType().Name, MethodBase.GetCurrentMethod().Name);
         }
 
         public override void Unload()
         {
-            throw new NotImplementedException();
+            RuntimeContext.LogManager.LogMessage(ModuleInfo.Id, LogLevel.Info, this.GetType().Name, MethodBase.GetCurrentMethod().Name);
         }
 
         public override void UserConnected(UserInfo userInfo)
         {
-            throw new NotImplementedException();
+            RuntimeContext.LogManager.LogMessage(ModuleInfo.Id, LogLevel.Info, this.GetType().Name, MethodBase.GetCurrentMethod().Name);
+            RuntimeContext.MessageSender.TrySendMessage(GetWildacateAuthenticationMessage());
         }
 
         public override void UserDisconnected(UserInfo userInfo)
         {
-            throw new NotImplementedException();
+            RuntimeContext.LogManager.LogMessage(ModuleInfo.Id, LogLevel.Info, this.GetType().Name, MethodBase.GetCurrentMethod().Name);
         }
 
         public override void UserInfoChanged(UserInfo userInfo)
         {
-            throw new NotImplementedException();
+            RuntimeContext.LogManager.LogMessage(ModuleInfo.Id, LogLevel.Info, this.GetType().Name, MethodBase.GetCurrentMethod().Name);
         }
+
+        private Message GetWildacateAuthenticationMessage()
+        {
+            return new CommandWrapper<WildCatAuthenicationEventArgs>(
+                new WildCatAuthenicationEventArgs { AuthenticationArgument = "message args"}, ModuleInfo.Id)
+                .ToMessage();
+        }
+    }
+
+    [Serializable]
+    public class WildCatAuthenicationEventArgs : EventArgs
+    {
+        public string AuthenticationArgument { get; set; }
     }
 }
