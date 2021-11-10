@@ -55,36 +55,7 @@ namespace WildCatUnitePluginTest
         }
 
         #endregion Ctor
-
-        [Trait("Category", "Unit")]
-        [Fact]
-        public void Given_When_Then()
-        {
-            //// Given
-            //var sut = _fixture.Create<AutomationHelper>();
-            //var name = _fixture.Create<string>();
-            //var id = _fixture.Create<int>();
-            //var rootWindows = _fixture.Create<List<Mock<IAutomationElementWrapper>>>();
-            //var foundWindowElement = _fixture.Create<Mock<IAutomationElementWrapper>>();
-            //var invokePatternWrapper = _fixture.Create<Mock<IInvokePatternWrapper>>();
-
-            //foundWindowElement.Setup(mock => mock.GetCurrentPattern(It.IsAny<AutomationPattern>()))
-            //    .Returns(invokePatternWrapper.Object);
-
-            //_automationElementWrapperProvider
-            //    .Setup(mock => mock.RootElement.FindAll(It.IsAny<TreeScope>(), It.IsAny<Condition>()))
-            //    .Returns(rootWindows.Select(mock => mock.Object).ToList());
-
-            //rootWindows.ForEach(mock => mock.Setup(x => x.FindFirst(It.IsAny<TreeScope>(), It.IsAny<Condition>()))
-            //    .Returns((IAutomationElementWrapper)null)
-            //);
-            //rootWindows.Last().Setup(mock => mock.FindFirst(It.IsAny<TreeScope>(), It.IsAny<Condition>()))
-            //    .Returns(foundWindowElement.Object);
-
-            //// When
-            //sut.InvokeAutomationElementByName(name, id);
-            //// Then
-            //invokePatternWrapper.Verify(v => v.Invoke(), Times.Once);
-        }
     }
 }
+
+
