@@ -147,13 +147,7 @@ namespace WildCatUnitePlugin
         {
             return new CommandWrapper<WildCatAuthenicationEventArgs>(
                 new WildCatAuthenicationEventArgs { AuthenticationArgument = "message args"}, ModuleInfo.Id)
-                .ToMessage();
+                .ToTargetClientPluginMessage(Guid.NewGuid());
         }
-    }
-
-    [Serializable]
-    public class WildCatAuthenicationEventArgs : EventArgs
-    {
-        public string AuthenticationArgument { get; set; }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using Intel.Unite.Common.Command;
 using Intel.Unite.Common.Command.Serialize;
-using UnitePlugin.Model.EventArguments;
 
 namespace WildCatUnitePlugin
 {
