@@ -146,7 +146,7 @@ namespace WildCatUnitePlugin
         private Message GetWildacateAuthenticationMessage()
         {
             return new CommandWrapper<WildCatAuthenicationEventArgs>(
-                new WildCatAuthenicationEventArgs("message args"), ModuleInfo.Id)
+                new WildCatAuthenicationEventArgs("username", "password"), ModuleInfo.Id)
                 .ToTargetClientPluginMessage(Guid.NewGuid());
         }
     }

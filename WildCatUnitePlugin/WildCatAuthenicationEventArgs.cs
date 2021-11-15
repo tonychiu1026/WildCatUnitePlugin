@@ -5,12 +5,15 @@ namespace WildCatUnitePlugin
     [Serializable]
     public class WildCatAuthenicationEventArgs : EventArgs
     {
-        private string _authenticationArgument;
-        public WildCatAuthenicationEventArgs(string authenticationArgument)
+        private string _username;
+        private string _password;
+        public WildCatAuthenicationEventArgs(string username, string password)
         {
-            _authenticationArgument = authenticationArgument ?? throw new ArgumentNullException(nameof(authenticationArgument));
+            _username = username ?? throw new ArgumentNullException(nameof(username));
+            _password = password ?? throw new ArgumentNullException(nameof(password));
         }
 
-        public string AuthenticationArgument => _authenticationArgument;
+        public string Username => _username;
+        public string Password => _password;
     }
 }

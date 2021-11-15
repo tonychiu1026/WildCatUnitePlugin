@@ -68,7 +68,7 @@ namespace PluginModuleHandlerTest
             runtimeContext.Verify(v => v.MessageSender.TrySendMessage(It.IsAny<Message>()), Times.Once);
             expectedMessage.DataType.Should().Be(testMessage.DataType);
             var messagedata = new JsonCommandSerializer().Deserialize<WildCatAuthenicationEventArgs>(testMessage.Data);
-            var testdata = new WildCatAuthenicationEventArgs("message args");
+            var testdata = new WildCatAuthenicationEventArgs("username", "password");
             messagedata.Should().BeEquivalentTo(testdata);
         }
     }
