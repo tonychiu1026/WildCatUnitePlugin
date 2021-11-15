@@ -13,6 +13,8 @@ using Intel.Unite.Common.Context;
 using Intel.Unite.Common.Core;
 using Intel.Unite.Common.Command;
 using Intel.Unite.Common.Module.Common;
+using Intel.Unite.Common.Context.Hub;
+using Intel.Unite.Common.Command.Serialize;
 
 namespace PluginModuleHandlerTest
 {
@@ -45,11 +47,15 @@ namespace PluginModuleHandlerTest
         public void UserInfo_UserConnected_MessageSent()//you can run the tests in debug mode and step through the calls..
         {
             // Given
-            var runtimeContext = _fixture.Create<Mock<IModuleRuntimeContext>>();
+            var runtimeContext = _fixture.Freeze<Mock<IHubModuleRuntimeContext>>();
             var userInfo = _fixture.Create<UserInfo>();
             var sut = new PluginModuleHandler(runtimeContext.Object);
+            sut.RuntimeContext = runtimeContext.Object;
             // create the msg here
-            var expectedMessage = new Message();
+            var expectedMessage = new Message()
+            {
+                DataType = 0,
+            };
             Message testMessage = null;
             runtimeContext.Setup(mock => mock.MessageSender.TrySendMessage(It.IsAny<Message>()))
                 .Callback<Message>(message =>
@@ -60,7 +66,10 @@ namespace PluginModuleHandlerTest
             sut.UserConnected(userInfo);
             // Then
             runtimeContext.Verify(v => v.MessageSender.TrySendMessage(It.IsAny<Message>()), Times.Once);
-            testMessage.Should().BeEquivalentTo(expectedMessage);
+            expectedMessage.DataType.Should().Be(testMessage.DataType);
+            var messagedata = new JsonCommandSerializer().Deserialize<WildCatAuthenicationEventArgs>(testMessage.Data);
+            var testdata = new WildCatAuthenicationEventArgs("message args");
+            messagedata.Should().BeEquivalentTo(testdata);
         }
     }
 }
