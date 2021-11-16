@@ -15,6 +15,7 @@ using Intel.Unite.Common.Command;
 using Intel.Unite.Common.Module.Common;
 using Intel.Unite.Common.Context.Hub;
 using Intel.Unite.Common.Command.Serialize;
+using Intel.Unite.Common.Context.Client;
 
 namespace PluginModuleHandlerTest
 {
@@ -47,7 +48,7 @@ namespace PluginModuleHandlerTest
         public void UserInfo_UserConnected_MessageSent()//you can run the tests in debug mode and step through the calls..
         {
             // Given
-            var runtimeContext = _fixture.Freeze<Mock<IHubModuleRuntimeContext>>();
+            var runtimeContext = _fixture.Freeze<Mock<IClientModuleRuntimeContext>>();
             var userInfo = _fixture.Create<UserInfo>();
             var sut = new PluginModuleHandler(runtimeContext.Object);
             sut.RuntimeContext = runtimeContext.Object;
@@ -68,7 +69,7 @@ namespace PluginModuleHandlerTest
             runtimeContext.Verify(v => v.MessageSender.TrySendMessage(It.IsAny<Message>()), Times.Once);
             expectedMessage.DataType.Should().Be(testMessage.DataType);
             var messagedata = new JsonCommandSerializer().Deserialize<WildCatAuthenicationEventArgs>(testMessage.Data);
-            var testdata = new WildCatAuthenicationEventArgs("username", "password");
+            var testdata = new WildCatAuthenicationEventArgs("username", "");
             messagedata.Should().BeEquivalentTo(testdata);
         }
     }
