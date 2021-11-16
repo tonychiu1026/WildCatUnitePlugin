@@ -71,7 +71,7 @@ namespace WildCatUnitePlugin
 
         private static readonly ModuleManifest _moduleManifest = new ModuleManifest
         {
-            Owner = UniteModuleOwner.Hub,
+            Owner = UniteModuleOwner.Client,
             ModuleId = _moduleInfo.Id,
             Name = new MultiLanguageString(_moduleInfo.Name),
             Description = new MultiLanguageString(_moduleInfo.Description),
