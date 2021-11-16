@@ -15,6 +15,8 @@ using Intel.Unite.Common.Module.Feature.Hub;
 using Intel.Unite.Common.Logging;
 using Intel.Unite.Common.Command.Serialize;
 using Intel.Unite.Common.Module.Feature.Client;
+using Intel.Unite.Common.Display.Client;
+using WildCatUnitePlugin.UI;
 
 namespace WildCatUnitePlugin
 {
@@ -68,8 +70,8 @@ namespace WildCatUnitePlugin
             EntryPoint = _entryPoint,
             ModuleType = _moduleInfo.ModuleType,
         };
+        private ClientDisplayView _iconView;
 
-       
         public PluginModuleHandler()
         {
         }
@@ -110,6 +112,33 @@ namespace WildCatUnitePlugin
         public override void Load()
         {
             RuntimeContext.LogManager.LogMessage(ModuleInfo.Id, LogLevel.Info, this.GetType().Name, MethodBase.GetCurrentMethod().Name);
+
+            MarshalNativeHandleContract contractIcon = null;
+
+            CurrentUiDispatcher.Invoke(() =>
+            {
+                var icon = new ClientIcon();
+                contractIcon = CreateContract(icon);
+            });
+
+            RuntimeContext.DisplayManager.AllocateUiInClientDisplayAsync(contractIcon,
+                new ClientAllocationInfo
+                {
+                    ModuleOwnerId = ModuleInfo.Id,
+                    ViewType = ClientDisplayViewType.ToolsMenuView,
+                    FriendlyName = "WildCatUnitePlugin.IconView",
+                }, AllocationIconResult);
+        }
+
+        public void AllocationIconResult(ClientAllocationResult result) // must be public or Unite core can't invoke
+        {
+            if (!result.Success)
+            {
+                RuntimeContext.LogManager.LogMessage(ModuleInfo.Id, LogLevel.Info, this.GetType().Name, MethodBase.GetCurrentMethod().Name);
+                return;
+            }
+
+            _iconView = result.AllocatedView;
         }
 
         public override bool OkToSleepDisplay()
