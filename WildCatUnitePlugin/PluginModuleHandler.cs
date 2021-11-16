@@ -17,6 +17,7 @@ using Intel.Unite.Common.Command.Serialize;
 using Intel.Unite.Common.Module.Feature.Client;
 using Intel.Unite.Common.Display.Client;
 using WildCatUnitePlugin.UI;
+using System.IO;
 
 namespace WildCatUnitePlugin
 {
@@ -44,17 +45,29 @@ namespace WildCatUnitePlugin
         private const string _minimumUniteVersion = "4.0.0.0";
         private const string _entryPoint = "WildCatUnitePlugin.dll";
 
-        private static readonly ManifestOsSet _files = new ManifestOsSet
+        private static ManifestOsSet _files => GetManifestFiles();
+
+        public static ManifestOsSet GetManifestFiles()
         {
-            Windows = new Collection<ManifestFile>
-        {
-        new ManifestFile()
-        {
-            SourcePath = _entryPoint,
-            TargetPath = _entryPoint,
+            string[] files = Directory.GetFiles(".", "*", SearchOption.AllDirectories);
+
+            var result = new ManifestOsSet()
+            {
+                Windows = new Collection<ManifestFile>()
+            };
+
+            foreach (var file in files)
+            {
+                result.Windows.Add(new ManifestFile
+                {
+                    SourcePath = file,
+                    TargetPath = file,
+                });
+            }
+            return result;
         }
-        }
-        };
+
+
 
         private static readonly ModuleManifest _moduleManifest = new ModuleManifest
         {
@@ -74,10 +87,12 @@ namespace WildCatUnitePlugin
 
         public PluginModuleHandler()
         {
+            FeatureModuleType = FeatureModuleType.Native;
         }
 
         public PluginModuleHandler(IModuleRuntimeContext runtimeContext) : base(runtimeContext)
         {
+            FeatureModuleType = FeatureModuleType.Native;
         }
 
         public override string HtmlUrlOrContent => null;

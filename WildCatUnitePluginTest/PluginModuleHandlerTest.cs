@@ -16,6 +16,7 @@ using Intel.Unite.Common.Module.Common;
 using Intel.Unite.Common.Context.Hub;
 using Intel.Unite.Common.Command.Serialize;
 using Intel.Unite.Common.Context.Client;
+using Intel.Unite.Common.Module.Feature.Client;
 
 namespace PluginModuleHandlerTest
 {
@@ -38,13 +39,14 @@ namespace PluginModuleHandlerTest
             // Given
             // When
             // Then
-            _sutType.Should().BeAssignableTo<HubFeatureModuleBase>();
+            _sutType.Should().BeAssignableTo<ClientFeatureModuleBase>();
         }
 
         #endregion Ctor
-
+        /*
         [Trait("Category", "Unit")]
         [Fact]
+  
         public void UserInfo_UserConnected_MessageSent()//you can run the tests in debug mode and step through the calls..
         {
             // Given
@@ -71,6 +73,20 @@ namespace PluginModuleHandlerTest
             var messagedata = new JsonCommandSerializer().Deserialize<WildCatAuthenicationEventArgs>(testMessage.Data);
             var testdata = new WildCatAuthenicationEventArgs("username", "");
             messagedata.Should().BeEquivalentTo(testdata);
+        }
+        */
+
+        [Trait("Category", "Unit")]
+        [Fact]
+        public void Manifest_ManifestfileGet_Correctfiles()//you can run the tests in debug mode and step through the calls..
+        {
+            // Given
+
+            // When
+            var files = PluginModuleHandler.GetManifestFiles();
+            // Then
+            files.Should().NotBeNull();
+            files.Windows.Should().HaveCount(210);
         }
     }
 }
