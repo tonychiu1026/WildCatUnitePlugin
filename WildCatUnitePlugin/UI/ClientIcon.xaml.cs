@@ -26,7 +26,7 @@ namespace WildCatUnitePlugin.UI
             InitializeComponent();
         }
 
-        private void QuickAccessButton_Click(object sender, RoutedEventArgs e)
+        public void QuickAccessButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
