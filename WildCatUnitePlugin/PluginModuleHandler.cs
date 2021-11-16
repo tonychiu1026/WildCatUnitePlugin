@@ -14,16 +14,17 @@ using Intel.Unite.Common.Module.Common;
 using Intel.Unite.Common.Module.Feature.Hub;
 using Intel.Unite.Common.Logging;
 using Intel.Unite.Common.Command.Serialize;
+using Intel.Unite.Common.Module.Feature.Client;
 
 namespace WildCatUnitePlugin
 {
-    public class PluginModuleHandler : HubFeatureModuleBase
+    public class PluginModuleHandler : ClientFeatureModuleBase
     {
         private const string _guid = "59326676-1efa-4120-b99a-8500b8be1469";
-        private const string _name = "Unite Plugin Example";
-        private const string _description = "Unite Plugin Example";
-        private const string _copyright = "Intel Corporation 2019";
-        private const string _vendor = "Intel Corporation";
+        private const string _name = "Wild Cat Plugin Authenticator";
+        private const string _description = "Program to launch apps";
+        private const string _copyright = "University Of Kentucky";
+        private const string _vendor = "University Of Kentucky";
         private const string _version = "1.0.0.3";
 
         private static readonly ModuleInfo _moduleInfo = new ModuleInfo
@@ -130,7 +131,7 @@ namespace WildCatUnitePlugin
         public override void UserConnected(UserInfo userInfo)
         {
             RuntimeContext.LogManager.LogMessage(ModuleInfo.Id, LogLevel.Info, this.GetType().Name, MethodBase.GetCurrentMethod().Name);
-            RuntimeContext.MessageSender.TrySendMessage(GetWildacateAuthenticationMessage());
+            //RuntimeContext.MessageSender.TrySendMessage(GetWildacateAuthenticationMessage());
         }
 
         public override void UserDisconnected(UserInfo userInfo)
@@ -143,11 +144,21 @@ namespace WildCatUnitePlugin
             RuntimeContext.LogManager.LogMessage(ModuleInfo.Id, LogLevel.Info, this.GetType().Name, MethodBase.GetCurrentMethod().Name);
         }
 
-        private Message GetWildacateAuthenticationMessage()
+        //private Message GetWildacateAuthenticationMessage()
+        //{
+        //    return new CommandWrapper<WildCatAuthenicationEventArgs>(
+        //        new WildCatAuthenicationEventArgs("username", "password"), ModuleInfo.Id)
+        //        .ToTargetClientPluginMessage(Guid.NewGuid());
+        //}
+
+        public override void OnConnectionReady(UserInfo hubInfo)
         {
-            return new CommandWrapper<WildCatAuthenicationEventArgs>(
-                new WildCatAuthenicationEventArgs("username", "password"), ModuleInfo.Id)
-                .ToTargetClientPluginMessage(Guid.NewGuid());
+            RuntimeContext.LogManager.LogMessage(ModuleInfo.Id, LogLevel.Info, this.GetType().Name, MethodBase.GetCurrentMethod().Name);
+        }
+
+        public override void OnConnectionLost(UserInfo hubInfo)
+        {
+            RuntimeContext.LogManager.LogMessage(ModuleInfo.Id, LogLevel.Info, this.GetType().Name, MethodBase.GetCurrentMethod().Name);
         }
     }
 }
