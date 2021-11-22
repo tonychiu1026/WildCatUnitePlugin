@@ -33,7 +33,7 @@ namespace WildCatUnitePlugin.UI
                 using (Process myProcess = new Process())
                 {
                     myProcess.StartInfo.UseShellExecute = false;
-                    myProcess.StartInfo.FileName = "./AppData/SurgeryQuest.exe";
+                    myProcess.StartInfo.FileName = "./Appdata/SurgeryQuest.exe";
                     myProcess.StartInfo.Arguments = "username = \"username\" password = \"password\"";
                     myProcess.Start();
                 }
