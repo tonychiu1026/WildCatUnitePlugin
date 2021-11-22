@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -28,12 +29,15 @@ namespace WildCatUnitePlugin.UI
 
         public void QuickAccessButton_Click(object sender, RoutedEventArgs e)
         {
+#if Debug
+            var dir = Directory.GetCurrentDirectory();
+#endif
             try
             {
                 using (Process myProcess = new Process())
                 {
                     myProcess.StartInfo.UseShellExecute = false;
-                    myProcess.StartInfo.FileName = "./Appdata/SurgeryQuest.exe";
+                    myProcess.StartInfo.FileName = "./FeatureModules/59326676-1efa-4120-b99a-8500b8be1469/Appdata/SurgeryQuest.exe";
                     myProcess.StartInfo.Arguments = "username = \"username\" password = \"password\"";
                     myProcess.Start();
                 }

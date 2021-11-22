@@ -126,6 +126,7 @@ namespace WildCatUnitePlugin
 
         public override void Load()
         {
+            System.Diagnostics.Debugger.Launch();
             RuntimeContext.LogManager.LogMessage(ModuleInfo.Id, LogLevel.Info, this.GetType().Name, MethodBase.GetCurrentMethod().Name);
 
             MarshalNativeHandleContract contractIcon = null;
