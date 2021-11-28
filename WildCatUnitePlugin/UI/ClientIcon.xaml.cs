@@ -38,7 +38,7 @@ namespace WildCatUnitePlugin.UI
                 {
                     myProcess.StartInfo.UseShellExecute = false;
                     myProcess.StartInfo.FileName = "./FeatureModules/59326676-1efa-4120-b99a-8500b8be1469/Appdata/SurgeryQuest.exe";
-                    myProcess.StartInfo.Arguments = "username = \"username\" password = \"password\"";
+                    myProcess.StartInfo.Arguments = "\"username\" \"password\"";
                     myProcess.Start();
                 }
             }
