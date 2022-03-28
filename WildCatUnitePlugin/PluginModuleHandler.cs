@@ -14,16 +14,20 @@ using Intel.Unite.Common.Module.Common;
 using Intel.Unite.Common.Module.Feature.Hub;
 using Intel.Unite.Common.Logging;
 using Intel.Unite.Common.Command.Serialize;
+using Intel.Unite.Common.Module.Feature.Client;
+using Intel.Unite.Common.Display.Client;
+using WildCatUnitePlugin.UI;
+using System.IO;
 
 namespace WildCatUnitePlugin
 {
-    public class PluginModuleHandler : HubFeatureModuleBase
+    public class PluginModuleHandler : ClientFeatureModuleBase
     {
         private const string _guid = "59326676-1efa-4120-b99a-8500b8be1469";
-        private const string _name = "Unite Plugin Example";
-        private const string _description = "Unite Plugin Example";
-        private const string _copyright = "Intel Corporation 2019";
-        private const string _vendor = "Intel Corporation";
+        private const string _name = "Wild Cat Plugin Authenticator";
+        private const string _description = "Program to launch apps";
+        private const string _copyright = "University Of Kentucky";
+        private const string _vendor = "University Of Kentucky";
         private const string _version = "1.0.0.3";
 
         private static readonly ModuleInfo _moduleInfo = new ModuleInfo
@@ -41,21 +45,33 @@ namespace WildCatUnitePlugin
         private const string _minimumUniteVersion = "4.0.0.0";
         private const string _entryPoint = "WildCatUnitePlugin.dll";
 
-        private static readonly ManifestOsSet _files = new ManifestOsSet
+        private static ManifestOsSet _files => GetManifestFiles();
+
+        public static ManifestOsSet GetManifestFiles()
         {
-            Windows = new Collection<ManifestFile>
-        {
-        new ManifestFile()
-        {
-            SourcePath = _entryPoint,
-            TargetPath = _entryPoint,
+            string[] files = Directory.GetFiles(".", "*", SearchOption.AllDirectories);
+
+            var result = new ManifestOsSet()
+            {
+                Windows = new Collection<ManifestFile>()
+            };
+
+            foreach (var file in files)
+            {
+                result.Windows.Add(new ManifestFile
+                {
+                    SourcePath = file,
+                    TargetPath = file,
+                });
+            }
+            return result;
         }
-        }
-        };
+
+
 
         private static readonly ModuleManifest _moduleManifest = new ModuleManifest
         {
-            Owner = UniteModuleOwner.Hub,
+            Owner = UniteModuleOwner.Client,
             ModuleId = _moduleInfo.Id,
             Name = new MultiLanguageString(_moduleInfo.Name),
             Description = new MultiLanguageString(_moduleInfo.Description),
@@ -67,14 +83,16 @@ namespace WildCatUnitePlugin
             EntryPoint = _entryPoint,
             ModuleType = _moduleInfo.ModuleType,
         };
+        private ClientDisplayView _iconView;
 
-       
         public PluginModuleHandler()
         {
+            FeatureModuleType = FeatureModuleType.Native;
         }
 
         public PluginModuleHandler(IModuleRuntimeContext runtimeContext) : base(runtimeContext)
         {
+            FeatureModuleType = FeatureModuleType.Native;
         }
 
         public override string HtmlUrlOrContent => null;
@@ -108,7 +126,35 @@ namespace WildCatUnitePlugin
 
         public override void Load()
         {
+            //System.Diagnostics.Debugger.Launch();
             RuntimeContext.LogManager.LogMessage(ModuleInfo.Id, LogLevel.Info, this.GetType().Name, MethodBase.GetCurrentMethod().Name);
+
+            MarshalNativeHandleContract contractIcon = null;
+
+            CurrentUiDispatcher.Invoke(() =>
+            {
+                var icon = new ClientIcon();
+                contractIcon = CreateContract(icon);
+            });
+
+            RuntimeContext.DisplayManager.AllocateUiInClientDisplayAsync(contractIcon,
+                new ClientAllocationInfo
+                {
+                    ModuleOwnerId = ModuleInfo.Id,
+                    ViewType = ClientDisplayViewType.ToolsMenuView,
+                    FriendlyName = "WildCatUnitePlugin.IconView",
+                }, AllocationIconResult);
+        }
+
+        public void AllocationIconResult(ClientAllocationResult result) // must be public or Unite core can't invoke
+        {
+            if (!result.Success)
+            {
+                RuntimeContext.LogManager.LogMessage(ModuleInfo.Id, LogLevel.Info, this.GetType().Name, MethodBase.GetCurrentMethod().Name);
+                return;
+            }
+
+            _iconView = result.AllocatedView;
         }
 
         public override bool OkToSleepDisplay()
@@ -130,7 +176,7 @@ namespace WildCatUnitePlugin
         public override void UserConnected(UserInfo userInfo)
         {
             RuntimeContext.LogManager.LogMessage(ModuleInfo.Id, LogLevel.Info, this.GetType().Name, MethodBase.GetCurrentMethod().Name);
-            RuntimeContext.MessageSender.TrySendMessage(GetWildacateAuthenticationMessage());
+            //RuntimeContext.MessageSender.TrySendMessage(GetWildacateAuthenticationMessage());
         }
 
         public override void UserDisconnected(UserInfo userInfo)
@@ -143,11 +189,21 @@ namespace WildCatUnitePlugin
             RuntimeContext.LogManager.LogMessage(ModuleInfo.Id, LogLevel.Info, this.GetType().Name, MethodBase.GetCurrentMethod().Name);
         }
 
-        private Message GetWildacateAuthenticationMessage()
+        //private Message GetWildacateAuthenticationMessage()
+        //{
+        //    return new CommandWrapper<WildCatAuthenicationEventArgs>(
+        //        new WildCatAuthenicationEventArgs("username", "password"), ModuleInfo.Id)
+        //        .ToTargetClientPluginMessage(Guid.NewGuid());
+        //}
+
+        public override void OnConnectionReady(UserInfo hubInfo)
         {
-            return new CommandWrapper<WildCatAuthenicationEventArgs>(
-                new WildCatAuthenicationEventArgs("username", "password"), ModuleInfo.Id)
-                .ToTargetClientPluginMessage(Guid.NewGuid());
+            RuntimeContext.LogManager.LogMessage(ModuleInfo.Id, LogLevel.Info, this.GetType().Name, MethodBase.GetCurrentMethod().Name);
+        }
+
+        public override void OnConnectionLost(UserInfo hubInfo)
+        {
+            RuntimeContext.LogManager.LogMessage(ModuleInfo.Id, LogLevel.Info, this.GetType().Name, MethodBase.GetCurrentMethod().Name);
         }
     }
 }

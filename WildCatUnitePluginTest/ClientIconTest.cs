@@ -17,15 +17,17 @@ using Intel.Unite.Common.Context.Hub;
 using Intel.Unite.Common.Command.Serialize;
 using Intel.Unite.Common.Context.Client;
 using Intel.Unite.Common.Module.Feature.Client;
+using WildCatUnitePlugin.UI;
+using System.Windows.Controls;
 
 namespace PluginModuleHandlerTest
 {
-    public class PluginModuleHandlerTest
+    public class ClientIconTest
     {
-        private readonly Type _sutType = typeof(PluginModuleHandler);
+        private readonly Type _sutType = typeof(ClientIcon);
         private readonly IFixture _fixture;
 
-        public PluginModuleHandlerTest()
+        public ClientIconTest()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
         }
@@ -39,7 +41,7 @@ namespace PluginModuleHandlerTest
             // Given
             // When
             // Then
-            _sutType.Should().BeAssignableTo<ClientFeatureModuleBase>();
+            _sutType.Should().BeAssignableTo<UserControl>();
         }
 
         #endregion Ctor
@@ -81,12 +83,11 @@ namespace PluginModuleHandlerTest
         public void Manifest_ManifestfileGet_Correctfiles()//you can run the tests in debug mode and step through the calls..
         {
             // Given
+            var sut = _fixture.Create<ClientIcon>();
 
             // When
-            var files = PluginModuleHandler.GetManifestFiles();
+            sut.QuickAccessButton_Click(null, null);
             // Then
-            files.Should().NotBeNull();
-            files.Windows.Should().HaveCount(210);
         }
     }
 }
